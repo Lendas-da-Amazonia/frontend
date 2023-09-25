@@ -9,7 +9,7 @@ $ yarn install
 ```bash
 # development
 $ yarn dev
-
+```
 
 ## React + TypeScript + Vite
 
