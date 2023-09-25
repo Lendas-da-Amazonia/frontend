@@ -21,7 +21,7 @@ const Login = () => {
   const handleLogin = async () => {
     setLoading(true);
     const res = await fnUser.login({ email: info.email, senha: info.password })
-    if(res?.user?._id) {
+    if(res?.message === "Logado com sucesso") {
       setUser(UserModel(res.user))
       navigate("/users");
     }
@@ -66,7 +66,7 @@ const Login = () => {
           Entrar
         </Button>
 
-        <Link to={"/signup"}>Criar conta</Link>
+        <Link to={"/signup"} className="text-sm underline text-blue-500">Não possui uma conta? Criar uma</Link>
 
       </div>
     </main>

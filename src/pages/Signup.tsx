@@ -1,16 +1,14 @@
 import { useState } from "react";
 import { Button } from "../components/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { fnUser } from "../services/user";
-import { useAuth } from "../app/ContextAuth";
-import { UserModel } from "../model/User.model";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from 'react-toastify';
 
 const Login = () => {
-  const navigate = useNavigate();
 
-  const { setUser } = useAuth();
 
   const [loading, setLoading] = useState(false);
 
@@ -22,10 +20,18 @@ const Login = () => {
 
   const handleLogin = async () => {
     setLoading(true);
-    const res = await fnUser.login({ email: info.email, senha: info.password });
-    if (res?.user?._id) {
-      setUser(UserModel(res.user));
-      navigate("/users");
+    const res = await fnUser.signup({ nome: info.name, email: info.email, senha: info.password });
+    console.log("res: ", res)
+    console.log(res.message);
+    if (res.message === "Cadastrado com sucesso!") {
+      toast.success("Conta criada com sucesso!", {
+        toastId: "account-created-success"
+      })
+    }
+    else {
+      toast.error("Erro ao criar conta!", {
+        toastId: "account-create-error"
+      })
     }
     setLoading(false);
   };
@@ -53,9 +59,9 @@ const Login = () => {
           <Input
             className="w-full"
             placeholder="ex: Cristian Aragão"
-            value={info.email}
+            value={info.name}
             onChange={(e) =>
-              setInfo((prev) => ({ ...prev, email: e.target.value }))
+              setInfo((prev) => ({ ...prev, name: e.target.value }))
             }
           />
         </div>
@@ -85,10 +91,10 @@ const Login = () => {
         </div>
 
         <Button loading={loading} onClick={async () => await handleLogin()}>
-          Entrar
+          Criar
         </Button>
 
-        <Link to={"/signup"}>Criar conta</Link>
+        <Link to={"/login"} className="text-sm underline text-blue-500">Já possui uma conta? Faça login.</Link>
       </div>
     </main>
   );

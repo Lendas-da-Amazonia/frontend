@@ -82,7 +82,7 @@ const Cops = () => {
               return (
                 <div
                   key={user._id}
-                  className={`grid group grid-cols-2 gap-3 h-24 py-3 rounded px-5 bg-slate-200 group duration-200 border border-slate-300 hover:border-slate-700 cursor-pointer`}
+                  className={`grid group grid-cols-2 gap-3 h-14 py-1 rounded px-5 bg-slate-200 group duration-200 border border-slate-300 hover:border-slate-700 cursor-pointer`}
                 >
                   <div className="col-span-1 items-center hidden lg:flex">
                     <p>{user.nome}</p>
