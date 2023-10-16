@@ -1,22 +1,27 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { TypeUser } from "../types/user.type";
 
 const _controllerAuth = () => {
-  const [user, setUser] = useState<TypeUser>({} as TypeUser);
+
 
   const [status, setStatus] = useState<
     "loading" | "authenticated" | "not_authenticated"
   >("loading");
 
   useEffect(() => {
-    if(user._id) setStatus("authenticated")
+    const token = localStorage.getItem("token@lda");
+    if(token) setStatus("authenticated")
     else setStatus("not_authenticated")
-  }, [user]);
+  }, []);
+
+  const logout = () => {
+    localStorage.removeItem("token@lda");
+    setStatus("not_authenticated")
+  }
 
   return {
-    user,
-    setUser,
-    status
+    setStatus,
+    status,
+    logout
   };
 };
 

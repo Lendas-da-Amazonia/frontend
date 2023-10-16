@@ -1,15 +1,14 @@
 import { useState } from "react";
-import { Input } from "../components/Input";
-import { Button } from "../components/Button";
 import { Link, useNavigate } from "react-router-dom";
-import { fnUser } from "../services/user";
 import { useAuth } from "../app/ContextAuth";
-import { UserModel } from "../model/User.model";
+import { Button } from "../components/Button";
+import { Input } from "../components/Input";
+import { fnUser } from "../services/user";
 
 const Login = () => {
   const navigate = useNavigate();
 
-  const { setUser } = useAuth()
+  const { setStatus } = useAuth()
 
   const [loading, setLoading] = useState(false);
 
@@ -21,9 +20,11 @@ const Login = () => {
   const handleLogin = async () => {
     setLoading(true);
     const res = await fnUser.login({ email: info.email, senha: info.password })
-    if(res?.message === "Logado com sucesso") {
-      setUser(UserModel(res.user))
-      navigate("/users");
+    console.log("res: ", res)
+    if(res?.access_token) {
+      localStorage.setItem("token@lda", res?.access_token);
+      setStatus("authenticated")
+      navigate("/");
     }
     setLoading(false);
   };
