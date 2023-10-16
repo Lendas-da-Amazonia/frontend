@@ -1,6 +1,22 @@
+import { useAuth } from "@/app/ContextAuth"
 import { Input } from "@/components/ui/input"
+import { fnMyth } from "@/services/myth"
+import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 
 const List = () => {
+  const [list, setList] = useState<any[]>([])
+
+  const { status, logout } = useAuth()
+
+  useEffect(() => {
+    const load = async () => {
+      const lixAux = await fnMyth.getAll()
+      setList(lixAux)
+    }
+    load()
+  }, [])
+
   return (
     <div className="h-full min-h-screen bg-slate-900 relative text-white">
       <div
@@ -11,9 +27,17 @@ const List = () => {
         <header className="flex w-full max-w-3xl justify-between">
           <div className="flex gap-5 items-center">
             <a href="#">Início</a>
-            <a href="#">Criar uma história</a>
+            <Link to={status === "authenticated" ? "/create_legend" : "/login"}>
+              Criar uma história
+            </Link>
             <a href="#">Coleção</a>
-            <a href="#">Ajuda</a>
+            {/* <a href="#">Ajuda</a> */}
+            {status === "not_authenticated" && (
+              <Link to={"/login"}>Fazer Login</Link>
+            )}
+            {status === "authenticated" && (
+              <p onClick={logout} className="cursor-pointer">Sair</p>
+            )}
           </div>
           <Input placeholder="Procurar uma lenda" className="w-fit" />
         </header>
@@ -33,53 +57,30 @@ const List = () => {
       <div className="relative bg-slate-900 w-full h-full px-5 py-10 text-white flex flex-col gap-7 items-center justify-center">
         <section className="w-full max-w-3xl">
           <div className="flex justify-between">
-
-          <h1 className="text-lg font-bold">Últimas publicações</h1>
-          <a href="#" className="text-blue-400">Ver mais</a>
+            <h1 className="text-lg font-bold">Últimas publicações</h1>
+            <a href="#" className="text-blue-400">
+              Ver mais
+            </a>
           </div>
 
           <div className="grid grid-cols-3 gap-5 w-full mt-5">
-            {[...new Array(3)].map(() => (
-              <div>
-                <div className="aspect-video col-span-1 bg-slate-700 rounded"></div>
-                <p className="font-bold">Mula sem cabeça</p>
-                <p className="mt-3 text-sm">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...</p>
-              </div>
-            ))}
-          </div>
-        </section>
-        <section className="w-full max-w-3xl">
-      <div className="flex justify-between">
-
-          <h1 className="text-lg font-bold">Continuações</h1>
-          <a href="#" className="text-blue-400">Ver mais</a>
-          </div>
-
-          <div className="grid grid-cols-3 gap-5 w-full mt-5">
-            {[...new Array(3)].map(() => (
-              <div>
-                <div className="aspect-video col-span-1 bg-slate-700 rounded"></div>
-                <p className="font-bold">Mula sem cabeça</p>
-                <p className="mt-3 text-sm">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...</p>
-              </div>
-            ))}
-          </div>
-        </section>
-        <section className="w-full max-w-3xl">
-      <div className="flex justify-between">
-
-          <h1 className="text-lg font-bold">Mais lidas</h1>
-          <a href="#" className="text-blue-400">Ver mais</a>
-          </div>
-
-          <div className="grid grid-cols-3 gap-5 w-full mt-5">
-            {[...new Array(3)].map(() => (
-              <div>
-                <div className="aspect-video col-span-1 bg-slate-700 rounded"></div>
-                <p className="font-bold">Mula sem cabeça</p>
-                <p className="mt-3 text-sm">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...</p>
-              </div>
-            ))}
+            {list
+              // .filter((_: any, index) => index < 3)
+              .map((myth: any) => (
+                <Link to={"/legends/" + myth?.titulo}>
+                  <div className="aspect-video col-span-1 bg-slate-700 rounded"></div>
+                  <p className="mt-2 font-bold">{myth?.titulo}</p>
+                  <div className="text-sm">
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          myth?.texto?.substring(0, 100) +
+                          (myth?.texto?.length > 100 ? "..." : ""),
+                      }}
+                    />
+                  </div>
+                </Link>
+              ))}
           </div>
         </section>
       </div>

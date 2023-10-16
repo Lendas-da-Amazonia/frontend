@@ -1,25 +1,26 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react"
 
 import {
+  Navigate,
+  Route,
   BrowserRouter as Router,
   Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import { LoadingScreen } from "../layouts/LoadingScreen";
-import { Loading } from "../layouts/Loading";
-import { LayoutSidebar } from "../layouts/LayoutSidebar";
-import { useAuth } from "./ContextAuth";
+} from "react-router-dom"
+import { LayoutSidebar } from "../layouts/LayoutSidebar"
+import { Loading } from "../layouts/Loading"
+import { LoadingScreen } from "../layouts/LoadingScreen"
+import { useAuth } from "./ContextAuth"
 
-const Login = lazy(() => import("../pages/Login"));
-const Signup = lazy(() => import("../pages/Signup"));
-const ListUsers = lazy(() => import("../pages/Users/List"));
-const Legend = lazy(() => import("../pages/Legend/Post"));
-const Create = lazy(() => import("../pages/Legend/Create"));
-const LegendList = lazy(() => import("../pages/Legend/List"));
+const Login = lazy(() => import("../pages/Login"))
+const Signup = lazy(() => import("../pages/Signup"))
+const ListUsers = lazy(() => import("../pages/Users/List"))
+const Legend = lazy(() => import("../pages/Legend/Post"))
+const Create = lazy(() => import("../pages/Legend/Create"))
+const LegendList = lazy(() => import("../pages/Legend/List"))
+const MyLegendList = lazy(() => import("../pages/Legend/MyList"))
 
 const AppRoutes = () => {
-  const { status } = useAuth();
+  const { status } = useAuth()
 
   return (
     <>
@@ -39,32 +40,54 @@ const AppRoutes = () => {
             }
           >
             <Routes>
-              <Route path="*" element={<Navigate to="/login" />} />
+              <Route path="*" element={<Navigate to="/" />} />
+
+              <Route path="/" element={<LegendList />} />
 
               <Route path="/login" element={<Login />} />
 
               <Route path="/signup" element={<Signup />} />
 
-              <Route path="/create_legend" element={<Create />} />
+              {status === "authenticated" && (
+                <Route
+                  path="/create_legend"
+                  element={
+                    <LayoutSidebar>
+                      <Create />
+                    </LayoutSidebar>
+                  }
+                />
+              )}
 
-              <Route path="/legends/:id" element={<Legend/>}/>
+              <Route path="/legends/:title" element={<Legend />} />
 
-              <Route path="/legends" element={<LegendList/>}/>
+              {status === "authenticated" && (
+                <Route
+                  path="/users"
+                  element={
+                    <LayoutSidebar>
+                      <ListUsers />
+                    </LayoutSidebar>
+                  }
+                />
+              )}
 
-              <Route
-                path="/users"
-                element={
-                  <LayoutSidebar>
-                    <ListUsers />
-                  </LayoutSidebar>
-                }
-              />
+              {status === "authenticated" && (
+                <Route
+                  path="/my_legends"
+                  element={
+                    <LayoutSidebar>
+                      <MyLegendList />
+                    </LayoutSidebar>
+                  }
+                />
+              )}
             </Routes>
           </Suspense>
         </Router>
       )}
     </>
-  );
-};
+  )
+}
 
-export default AppRoutes;
+export default AppRoutes

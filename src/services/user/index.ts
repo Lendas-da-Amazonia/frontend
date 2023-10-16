@@ -1,5 +1,5 @@
 const login = async ({ email, senha }: { email: string; senha: string }) => {
-  const response = await fetch(`${import.meta.env.VITE_BACK_URL}/user/login`, {
+  const response = await fetch(`${import.meta.env.VITE_BACK_URL}/auth/login`, {
     body: JSON.stringify({ email: email, password: senha }),
     method: "POST",
     headers: {

@@ -1,13 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"
 
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom"
 
-import { MENU } from "../constants/MENU";
-import { Button } from "../components/Button";
+import { Button } from "../components/Button"
+import { MENU } from "../constants/MENU"
 
 export const LayoutSidebar = ({ children }: { children: React.ReactNode }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location = useLocation()
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     navigate("/login")
@@ -17,7 +17,9 @@ export const LayoutSidebar = ({ children }: { children: React.ReactNode }) => {
     <div className="flex min-h-screen">
       <div className="w-[300px] h-screen text-white fixed top-0 left-0 px-3 py-5 flex flex-col bg-slate-900">
         <div className="flex-1 flex flex-col overflow-y-auto">
-          <p className="text-center text-lg font-bold">Lendas da Amazônia</p>
+          <Link to={"/"}>
+            <p className="text-center text-lg font-bold">Lendas da Amazônia</p>
+          </Link>
           <nav className="mt-5 flex-1 px-2 space-y-1" aria-label="Sidebar">
             {MENU.map((item) => (
               <div
@@ -56,13 +58,15 @@ export const LayoutSidebar = ({ children }: { children: React.ReactNode }) => {
             </a>
             <p>v1.0.0</p>
           </div>
-          <Button variant="white" onClick={handleLogout}>Sair</Button>
+          <Button variant="white" onClick={handleLogout}>
+            Sair
+          </Button>
         </div>
       </div>
-      <div className="w-[calc(100%-300px)] ml-auto py-14 bg-slate-100 relative">
+      <div className="w-[calc(100%-300px)] ml-auto bg-slate-100 relative min-h-screen">
         <div className="absolute top-0 left-0 w-full h-full z-0 opacity-10 bg-center bg-cover bg-no-repeat" />
         <div className="relative z-10 h-full w-full">{children}</div>
       </div>
     </div>
-  );
-};
+  )
+}

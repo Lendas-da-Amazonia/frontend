@@ -1,27 +1,53 @@
+import { Button } from "@/components/Button"
 import { Tiptap } from "@/components/Editor"
-import { InputFile } from "@/components/InputFile"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { fnMyth } from "@/services/myth"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 const Create = () => {
-  const [content, setValue] = useState("")
-  const [file, setFile] = useState<File | undefined>(undefined)
+  const [title, setTitle] = useState("")
+  const [text, setText] = useState("")
+  // const [file, setFile] = useState<File | undefined>(undefined)
+
+  const navigate = useNavigate()
+
+  const handlePusblish = async () => {
+    if (!title.trim() || !text.trim()) return
+
+    try {
+      await fnMyth.create({
+        text,
+        title,
+      })
+
+      toast.success("Lenda publicada com sucesso!")
+      navigate("/")
+    } catch (e) {
+      toast.error("Erro ao criar lenda!")
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex justify-center">
-      <div className="h-full w-full max-w-3xl py-10 text-white grid grid-cols-3 gap-7">
-        <div className="col-span-1">
+    <div className="h-full bg-slate-900 flex justify-center">
+      <div className="w-full max-w-3xl py-10 text-white flex flex-col gap-7">
+        <div className="col-span-3 h-fit">
           <Label>Título</Label>
-          <Input placeholder="Digite aqui..." />
+          <Input
+            placeholder="Digite aqui..."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </div>
 
-        <div className="col-span-2">
+        {/* <div className="col-span-2">
           <Label>Tags</Label>
           <Input placeholder="Digite aqui..." />
-        </div>
+        </div> */}
 
-        <div className="col-span-3">
+        {/* <div className="col-span-3">
           <InputFile
             label="Capa"
             url=""
@@ -29,11 +55,15 @@ const Create = () => {
             setUrl={() => {}}
             setFile={setFile}
           />
+        </div> */}
+
+        <div className="col-span-3 h-fit">
+          <Label>História</Label>
+          <Tiptap value={text} setValue={(v) => setText(v)} />
         </div>
 
-        <div className="col-span-3">
-          <Label>História</Label>
-          <Tiptap value={content} setValue={(v) => setValue(v)} />
+        <div className="col-span-1 h-fit mt-10">
+          <Button onClick={handlePusblish}>Publicar</Button>
         </div>
       </div>
     </div>
