@@ -29,7 +29,7 @@ const Login = () => {
       })
     }
     else {
-      toast.error("Erro ao criar conta!", {
+      toast.error(res.message, {
         toastId: "account-create-error"
       })
     }
