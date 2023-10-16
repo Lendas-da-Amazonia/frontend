@@ -42,6 +42,8 @@ const List = () => {
           <Input placeholder="Procurar uma lenda" className="w-fit" />
         </header>
       </div>
+  
+  
       <main className="relative h-full w-full p-10 flex flex-col gap-10 justify-center items-center">
         <img src={"/logo.png"} className="h-fit w-fit" />
 
