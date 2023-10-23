@@ -69,7 +69,7 @@ const List = () => {
             {list
               // .filter((_: any, index) => index < 3)
               .map((myth: any) => (
-                <Link to={"/legends/" + myth?.titulo}>
+                <Link to={"/legends/" + myth?._id}>
                   <div className="aspect-video col-span-1 bg-slate-700 rounded"></div>
                   <p className="mt-2 font-bold">{myth?.titulo}</p>
                   <div className="text-sm">
