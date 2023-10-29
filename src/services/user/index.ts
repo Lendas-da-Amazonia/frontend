@@ -1,18 +1,23 @@
+import { api } from "../api"
+
 const login = async ({ email, senha }: { email: string; senha: string }) => {
-  const response = await fetch(`${import.meta.env.VITE_BACK_URL}/auth/login`, {
-    body: JSON.stringify({ email: email, password: senha }),
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-    },
+  const response = await api().post(`/auth/login`, {
+    email: email,
+    password: senha,
   })
-    .then((res) => res.json())
-    .catch(() => {});
 
-  return response;
-};
+  return response?.data
+}
 
-const signup = async ({ nome, email, senha }: { nome: string, email: string; senha: string }) => {
+const signup = async ({
+  nome,
+  email,
+  senha,
+}: {
+  nome: string
+  email: string
+  senha: string
+}) => {
   const response = await fetch(`${import.meta.env.VITE_BACK_URL}/user/create`, {
     body: JSON.stringify({ email: email, senha: senha, nome }),
     method: "POST",
@@ -21,10 +26,10 @@ const signup = async ({ nome, email, senha }: { nome: string, email: string; sen
     },
   })
     .then((res) => res.json())
-    .catch(() => {});
+    .catch(() => {})
 
-  return response;
-};
+  return response
+}
 
 const getUsers = async () => {
   const response = await fetch(`${import.meta.env.VITE_BACK_URL}/user`, {
@@ -34,13 +39,13 @@ const getUsers = async () => {
     },
   })
     .then((res) => res.json())
-    .catch(() => {});
+    .catch(() => {})
 
-  return response.encontrados;
-};
+  return response.encontrados
+}
 
 export const fnUser = {
   login,
   signup,
   getUsers,
-};
+}

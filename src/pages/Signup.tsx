@@ -21,8 +21,6 @@ const Login = () => {
   const handleLogin = async () => {
     setLoading(true);
     const res = await fnUser.signup({ nome: info.name, email: info.email, senha: info.password });
-    console.log("res: ", res)
-    console.log(res.message);
     if (res.message === "Cadastrado com sucesso!") {
       toast.success("Conta criada com sucesso!", {
         toastId: "account-created-success"

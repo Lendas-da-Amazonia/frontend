@@ -4,18 +4,17 @@ import { useLocation } from "react-router-dom"
 
 import { Button } from "../components/Button"
 import { MENU } from "../constants/MENU"
+import { useAuth } from "@/app/ContextAuth"
 
 export const LayoutSidebar = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const handleLogout = () => {
-    navigate("/login")
-  }
+  const { logout } = useAuth()
 
   return (
     <div className="flex min-h-screen">
-      <div className="w-[300px] h-screen text-white fixed top-0 left-0 px-3 py-5 flex flex-col bg-slate-900">
+      <div className="w-[300px] h-screen text-white fixed top-0 left-0 px-3 py-5 flex flex-col bg-slate-900 z-50">
         <div className="flex-1 flex flex-col overflow-y-auto">
           <Link to={"/"}>
             <p className="text-center text-lg font-bold">Lendas da Amazônia</p>
@@ -27,7 +26,7 @@ export const LayoutSidebar = ({ children }: { children: React.ReactNode }) => {
                 onClick={() => navigate(item.pathname)}
                 className={`
                 ${
-                  location.pathname.includes(item.pathname)
+                  location.pathname === item.pathname
                     ? "bg-slate-700 text-white"
                     : "text-gray-300 hover:bg-slate-800 hover:text-white"
                 }
@@ -58,7 +57,7 @@ export const LayoutSidebar = ({ children }: { children: React.ReactNode }) => {
             </a>
             <p>v1.0.0</p>
           </div>
-          <Button variant="white" onClick={handleLogout}>
+          <Button variant="white" onClick={logout}>
             Sair
           </Button>
         </div>

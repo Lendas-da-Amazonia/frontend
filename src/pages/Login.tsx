@@ -4,11 +4,14 @@ import { useAuth } from "../app/ContextAuth";
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 import { fnUser } from "../services/user";
+import { toast } from "react-toastify";
+import { decodeJwtToken } from "@/lib/utils";
+import { UserModel } from "@/model/User.model";
 
 const Login = () => {
   const navigate = useNavigate();
 
-  const { setStatus } = useAuth()
+  const { setStatus, setUser } = useAuth()
 
   const [loading, setLoading] = useState(false);
 
@@ -19,13 +22,23 @@ const Login = () => {
 
   const handleLogin = async () => {
     setLoading(true);
-    const res = await fnUser.login({ email: info.email, senha: info.password })
-    console.log("res: ", res)
-    if(res?.access_token) {
-      localStorage.setItem("token@lda", res?.access_token);
-      setStatus("authenticated")
-      navigate("/");
+    try {
+
+      const res = await fnUser.login({ email: info.email, senha: info.password })
+
+      if(res?.access_token) {
+        localStorage.setItem("token@lda", res?.access_token);
+        setUser(UserModel(decodeJwtToken(res?.access_token)))
+        setStatus("authenticated")
+        navigate("/");
+      }
     }
+    catch (e: any) {
+      console.error('message', e)
+
+      if(e?.message?.includes('401')) toast.error("Usuário ou senha incorretos!")
+    }
+
     setLoading(false);
   };
 

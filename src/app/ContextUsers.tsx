@@ -5,12 +5,15 @@ const _useController = () => {
   
   const [users, setUsers] = useState<TypeUser[]>([]);
 
+  const [authors, setAuthors] = useState<{ [idAuthor: string]: TypeUser }>({});
+
   useEffect(() => {
     // logica para trazer os usuarios
   }, []);
 
   return {
-    users, setUsers
+    users, setUsers,
+    authors,setAuthors
   };
 };
 

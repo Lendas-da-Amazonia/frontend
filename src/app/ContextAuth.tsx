@@ -1,7 +1,11 @@
+import { decodeJwtToken } from "@/lib/utils";
+import { UserModel } from "@/model/User.model";
+import { TypeUser } from "@/types/user.type";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const _controllerAuth = () => {
 
+  const [user, setUser] = useState({} as TypeUser)
 
   const [status, setStatus] = useState<
     "loading" | "authenticated" | "not_authenticated"
@@ -9,16 +13,23 @@ const _controllerAuth = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token@lda");
-    if(token) setStatus("authenticated")
-    else setStatus("not_authenticated")
+    if(token) {
+      setStatus("authenticated")
+      setUser(UserModel(decodeJwtToken(token)))
+    }
+    else {
+      logout()
+    }
   }, []);
 
   const logout = () => {
     localStorage.removeItem("token@lda");
     setStatus("not_authenticated")
+    setUser({} as TypeUser)
   }
 
   return {
+    user, setUser,
     setStatus,
     status,
     logout

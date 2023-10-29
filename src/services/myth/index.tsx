@@ -1,3 +1,4 @@
+import { toast } from "react-toastify"
 import { api } from "../api"
 
 const create = async ({
@@ -7,7 +8,7 @@ const create = async ({
   title: string
   text: string
 }) => {
-  const response = await api.post("myth/create", {
+  const response = await api().post("myth/create", {
     titulo: title,
     texto: text,
   }, { 
@@ -21,7 +22,7 @@ const create = async ({
 const getAll = async () => {
     try {
 
-        const response = await api.get("myth", { 
+        const response = await api().get("myth", { 
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("token@lda")}`
             }
@@ -38,7 +39,7 @@ const getByTitle = async (
 ) => {
     try {
 
-        const response = await api.get("myth/"+title, { 
+        const response = await api().get("myth/"+title, { 
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("token@lda")}`
             }
@@ -50,8 +51,21 @@ const getByTitle = async (
     }
   }
 
+const remove = async ({ id }: { id: string}) => {
+
+  try {
+    await api().delete(`/myth/delete/${id}`)
+    toast.success("Excluído!")
+  }
+  catch {
+    toast.error("Error ao excluir!")
+  }
+
+}
+
 export const fnMyth = {
     create,
     getAll,
-    getByTitle
+    getByTitle,
+    remove
 }

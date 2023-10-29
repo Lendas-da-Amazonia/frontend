@@ -25,15 +25,15 @@ const Cops = () => {
   }, [])
 
   let list = users.sort((obj1, obj2) =>
-    obj1.nome.normalize("NFD").toLowerCase() <
-    obj2.nome.normalize("NFD").toLowerCase()
+    obj1.username.normalize("NFD").toLowerCase() <
+    obj2.username.normalize("NFD").toLowerCase()
       ? -1
       : 1
   );
 
   list = list.filter(
     (obj) =>
-      obj.nome
+      obj.username
         .normalize("NFD")
         .toLowerCase()
         .includes(search.normalize("NFD").toLowerCase()) ||

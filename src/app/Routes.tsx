@@ -42,7 +42,20 @@ const AppRoutes = () => {
             <Routes>
               <Route path="*" element={<Navigate to="/" />} />
 
-              <Route path="/" element={<LegendList />} />
+              {status === "not_authenticated" && (
+                <Route path="/" element={<LegendList />} />
+              )}
+
+              {status === "authenticated" && (
+                <Route
+                  path="/"
+                  element={
+                    <LayoutSidebar>
+                      <LegendList />
+                    </LayoutSidebar>
+                  }
+                />
+              )}
 
               <Route path="/login" element={<Login />} />
 
@@ -59,7 +72,20 @@ const AppRoutes = () => {
                 />
               )}
 
-              <Route path="/legends/:title" element={<Legend />} />
+              {status === "not_authenticated" && (
+                <Route path="/legends/:id" element={<Legend />} />
+              )}
+
+              {status === "authenticated" && (
+                <Route
+                  path="/legends/:id"
+                  element={
+                    <LayoutSidebar>
+                      <Legend />
+                    </LayoutSidebar>
+                  }
+                />
+              )}
 
               {status === "authenticated" && (
                 <Route
@@ -74,7 +100,7 @@ const AppRoutes = () => {
 
               {status === "authenticated" && (
                 <Route
-                  path="/my_legends"
+                  path="/perfil"
                   element={
                     <LayoutSidebar>
                       <MyLegendList />

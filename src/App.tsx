@@ -1,10 +1,11 @@
-import { AuthProvider } from "./app/ContextAuth";
-import { UsersProvider } from "./app/ContextUsers";
-import AppRoutes from "./app/Routes";
+import { AuthProvider } from "./app/ContextAuth"
+import { MythsProvider } from "./app/ContextMyths"
+import { UsersProvider } from "./app/ContextUsers"
+import AppRoutes from "./app/Routes"
 
-import { ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify"
 
-import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css"
 
 function App() {
   return (
@@ -15,12 +16,14 @@ function App() {
         pauseOnHover={false}
       />
       <AuthProvider>
-        <UsersProvider>
-          <AppRoutes />
-        </UsersProvider>
+        <MythsProvider>
+          <UsersProvider>
+            <AppRoutes />
+          </UsersProvider>
+        </MythsProvider>
       </AuthProvider>
     </>
-  );
+  )
 }
 
-export default App;
+export default App
