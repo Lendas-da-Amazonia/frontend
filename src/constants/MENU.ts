@@ -1,5 +1,4 @@
 import { Home, Search, UserCircle2 } from "lucide-react";
-import { HiUsers } from "react-icons/hi";
 
 export const MENU = [
   {
