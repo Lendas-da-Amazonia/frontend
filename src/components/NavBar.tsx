@@ -7,11 +7,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
-import { toast } from "react-toastify"
 
 export const NavBar = () => {
   const { status, logout } = useAuth()
