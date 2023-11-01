@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { Button } from "../../components/Button"
 import { Input } from "../../components/Input"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useMyth } from "@/app/ContextMyths"
 
@@ -10,13 +10,20 @@ import { LibraryBig } from "lucide-react"
 import { useAuth } from "@/app/ContextAuth"
 import { getInitialsFromName } from "@/lib/getInitialsFromName"
 import { ListMyths } from "@/components/ListMyths"
+// import { useUsers } from "@/app/ContextUsers"
 const Cops = () => {
   const navigate = useNavigate()
+
+  // const { authors } = useUsers()
 
   const [search, setSeach] = useState("")
 
   const { user } = useAuth()
-  const { myMyths, totalMyMyths } = useMyth()
+  const { myMyths, totalMyMyths, setReload } = useMyth()
+
+  useEffect(() => {
+    setReload(prev => !prev)
+  },[setReload])
 
   return (
     <div className="h-full w-full flex justify-center px-5 bg-slate-800 text-white py-10">
@@ -56,7 +63,7 @@ const Cops = () => {
           </Button>
         </div>
 
-        {!totalMyMyths && (
+        {totalMyMyths === 0 && (
           <div className="flex flex-col gap-3 mt-20">
             <LibraryBig className="h-10 w-10 mx-auto" />
             <p className="font-bold text-xl text-center">
@@ -65,7 +72,7 @@ const Cops = () => {
           </div>
         )}
 
-        {totalMyMyths && <ListMyths myths={myMyths} editAndDelete/>}
+        {totalMyMyths > 0 && <ListMyths myths={myMyths} editAndDelete/>}
       </div>
     </div>
   )

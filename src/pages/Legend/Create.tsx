@@ -1,15 +1,27 @@
+import { useMyth } from "@/app/ContextMyths"
 import { Button } from "@/components/Button"
 import { Tiptap } from "@/components/Editor"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { fnMyth } from "@/services/myth"
+import { TypeMyth } from "@/types/myth.type"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-toastify"
 
+import { useAuth } from "@/app/ContextAuth"
+
 const Create = () => {
-  const [title, setTitle] = useState("")
-  const [text, setText] = useState("")
+  const { id } = useParams()
+  const { user } = useAuth()
+
+  const { myMythsDict, setReload } = useMyth()
+
+  const mythEdit = id ? myMythsDict[id] : {} as TypeMyth
+
+  const [title, setTitle] = useState(mythEdit?.titulo || "")
+  const [text, setText] = useState(mythEdit?.texto || "")
+
   // const [file, setFile] = useState<File | undefined>(undefined)
 
   const navigate = useNavigate()
@@ -17,15 +29,39 @@ const Create = () => {
   const handlePusblish = async () => {
     if (!title.trim() || !text.trim()) return
 
+    if (id) {
+      try {
+        await fnMyth.edit({
+          id,
+          data: {
+            texto: text,
+            titulo: title,
+          }
+        })
+
+        toast.success("Lenda editada!")
+        setReload(prev => !prev)
+        navigate("/legends/"+id)
+        
+      } catch (e) {
+        console.error(e)
+        toast.error("Erro ao editar!")
+      }
+
+      return;
+    }
+    
     try {
       await fnMyth.create({
         text,
         title,
       })
 
-      toast.success("Lenda publicada com sucesso!")
-      navigate("/")
+      setReload(prev => !prev)
+      toast.success("Lenda publicada!")
+      navigate("/perfil/"+user._id)
     } catch (e) {
+      console.error(e)
       toast.error("Erro ao criar lenda!")
     }
   }

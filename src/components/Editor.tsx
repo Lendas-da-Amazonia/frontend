@@ -134,7 +134,7 @@ export const Tiptap = ({
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto p-3 bg-transparent focus:outline-none max-h-[600px] overflow-auto",
+          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto p-3 bg-transparent focus:outline-none min-h-[300px] max-h-[600px] overflow-auto",
       },
     },
   });

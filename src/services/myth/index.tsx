@@ -1,5 +1,6 @@
 import { toast } from "react-toastify"
 import { api } from "../api"
+import { TypeMyth } from "@/types/myth.type"
 
 const create = async ({
   title,
@@ -63,8 +64,13 @@ const remove = async ({ id }: { id: string}) => {
 
 }
 
+const edit = async ({ id, data }: { id: string, data: Partial<TypeMyth> }) => {
+    await api().patch(`/myth/${id}/edit`, { ...data })
+}
+
 export const fnMyth = {
     create,
+    edit,
     getAll,
     getByTitle,
     remove

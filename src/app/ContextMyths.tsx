@@ -13,13 +13,39 @@ const _mythsController = () => {
   const [loadingMyMyths, setLoadingMyMyths] = useState(true)
   const [totalMyMyths, setTotalMyMyths] = useState(0)
   const [myMyths, setMyMyths] = useState<TypeMyth[]>([])
+  const [myMythsDict, setMyMythsDict] = useState<{
+    [idMyth: string]: TypeMyth
+  }>({})
+
+  // const [mythsByAuthorId, setMyByAuthor] = useState<{
+  //   [idAuthor: string]: { [idMyth: string]: TypeMyth }
+  // }>({})
 
   const [loadingComments, setLoadingComments] = useState(true)
-  const [comments, setComments] = useState<{ [idMyth: string]: TypeComment[] }>({})
+  const [comments, setComments] = useState<{ [idMyth: string]: TypeComment[] }>(
+    {}
+  )
 
   const [reload, setReload] = useState(false)
 
   const { user } = useAuth()
+
+  useEffect(() => {
+
+    const myMythsAux = [...myMyths]
+
+    myMythsAux.forEach((myth) => {
+      setMyMythsDict((prev) => ({
+        ...prev,
+        [myth._id]: myth 
+      }))
+      setReadMyths((prev) => ({
+        ...prev,
+        [myth._id]: myth 
+      }))
+    })
+
+  }, [myMyths])
 
   useEffect(() => {
     // logica para trazer os usuarios
@@ -51,8 +77,9 @@ const _mythsController = () => {
     loadingComments,
     setLoadingComments,
     reload,
-    setReload
-
+    setReload,
+    myMythsDict,
+    setMyMythsDict
   }
 }
 

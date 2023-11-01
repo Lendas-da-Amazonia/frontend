@@ -1,6 +1,6 @@
 import { convertStringToHTML } from "@/lib/convertStringToHtml"
 import { TypeMyth } from "@/types/myth.type"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,6 @@ import {
 import { MoreHorizontal } from "lucide-react"
 import { fnMyth } from "@/services/myth"
 import { useMyth } from "@/app/ContextMyths"
-import { toast } from "react-toastify"
 
 export const ListMyths = ({
   myths,
@@ -23,8 +22,10 @@ export const ListMyths = ({
 }) => {
   const { setReload, reload } = useMyth()
 
+  const navigate = useNavigate()
+
   return (
-    <div className="grid grid-cols-3 gap-5 w-full mt-10">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full mt-10">
       {myths.map((myth) => (
         <Link to={"/legends/" + myth?._id}>
           <div className="aspect-video col-span-1 bg-slate-700 rounded flex items-start justify-end p-2">
@@ -37,14 +38,16 @@ export const ListMyths = ({
                   <DropdownMenuLabel>Ações</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    onClick={() =>
-                      toast.info("Em breve esta ação estará disponível!", { toastId: "soon" })
-                    }
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      navigate(`/edit_legend/${myth._id}`)
+                    }}
                   >
                     Editar
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={async () => {
+                    onClick={async (e) => {
+                      e.stopPropagation()
                       await fnMyth.remove({ id: myth._id })
                       setReload(!reload)
                     }}

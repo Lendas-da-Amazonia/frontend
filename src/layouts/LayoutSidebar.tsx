@@ -20,7 +20,7 @@ export const LayoutSidebar = ({ children }: { children: React.ReactNode }) => {
             <p className="text-center text-lg font-bold">Lendas da Amazônia</p>
           </Link>
           <nav className="mt-5 flex-1 px-2 space-y-1" aria-label="Sidebar">
-            {MENU.map((item) => (
+            {MENU().map((item) => (
               <div
                 key={item.name}
                 onClick={() => navigate(item.pathname)}
@@ -64,7 +64,7 @@ export const LayoutSidebar = ({ children }: { children: React.ReactNode }) => {
       </div>
       <div className="w-[calc(100%-300px)] ml-auto bg-slate-100 relative min-h-screen">
         <div className="absolute top-0 left-0 w-full h-full z-0 opacity-10 bg-center bg-cover bg-no-repeat" />
-        <div className="relative z-10 h-full w-full">{children}</div>
+        <div className="relative z-10 h-screen w-full">{children}</div>
       </div>
     </div>
   )

@@ -75,6 +75,10 @@
   }
 }
 
+html, body {
+  background-color: #020617
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   background-color: rgba(red, green, blue, 0);
