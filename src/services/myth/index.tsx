@@ -5,13 +5,16 @@ import { TypeMyth } from "@/types/myth.type"
 const create = async ({
   title,
   text,
+  image
 }: {
   title: string
   text: string
+  image:string
 }) => {
   const response = await api().post("myth/create", {
     titulo: title,
     texto: text,
+    imagem: image
   }, { 
     headers: {
         "Authorization": `Bearer ${localStorage.getItem("token@lda")}`

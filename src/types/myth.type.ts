@@ -5,5 +5,6 @@ export type TypeMyth = {
   id_autor: string;
   titulo: string;
   texto: string;
+  imagem: string,
   created_at?: Date;
 }
