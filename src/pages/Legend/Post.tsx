@@ -51,7 +51,7 @@ const Post = () => {
 
   const [openModalEditComment, setOpenModalEditComment] = useState("")
 
-  const { authors, setAuthors } = useUsers()
+  const { setAuthors } = useUsers()
   const {
     readMyths,
     setReadMyths,
