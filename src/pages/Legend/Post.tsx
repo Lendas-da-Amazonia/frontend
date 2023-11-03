@@ -10,7 +10,6 @@ import { Link, useParams, useNavigate } from "react-router-dom"
 import { PostSkeleton } from "./PostSkeleton"
 import { Button as ButtonUi } from "@/components/ui/button"
 import { useUsers } from "@/app/ContextUsers"
-import { UserModel } from "@/model/User.model"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { getInitialsFromName } from "@/lib/getInitialsFromName"
 import { Loader2, MessageCircle, MoreHorizontal } from "lucide-react"
@@ -66,7 +65,6 @@ const Post = () => {
   } = useMyth()
 
   const myth = readMyths?.[id as string] || {}
-  const author = authors?.[myth?.id_autor as string] || {}
   const comment = comments?.[id as string] || []
 
   const [commentEdit, setCommentEdit] = useState({} as TypeComment)
@@ -98,12 +96,6 @@ const Post = () => {
             [id]: mythAux,
           }))
 
-          const authorResp = await api().get(`user/${mythAux.id_autor}`)
-
-          setAuthors((prev) => ({
-            ...prev,
-            [mythAux.id_autor]: UserModel(authorResp.data?.buscado),
-          }))
         } catch (e) {
           console.error(e)
         }
@@ -122,21 +114,6 @@ const Post = () => {
     const loadComments = async () => {
       try {
         const commentsAux = await api().get(`/comment/myth/${id}`)
-
-        console.log("commentsAux ", commentsAux)
-
-        for (const comm of commentsAux.data) {
-          console.log("comm ", comm)
-
-          if (!authors[comm?.id_user]?._id) {
-            const authorResp = await api().get(`user/${comm?.id_user}`)
-
-            setAuthors((prev) => ({
-              ...prev,
-              [comm.id_user]: UserModel(authorResp.data?.buscado),
-            }))
-          }
-        }
 
         if (id) {
           setComments((prev) => ({
@@ -255,12 +232,12 @@ const Post = () => {
                 <Avatar className="h-24 w-24">
                   <AvatarImage src="https://github.com/" />
                   <AvatarFallback className="text-black text-3xl font-bold text-center">
-                    {getInitialsFromName(author?.username)}
+                    {getInitialsFromName(myth?.nome_autor)}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h1 className="text-lg font-bold">{author?.username}</h1>
-                  <p className="text-neutral-400">{author?.email}</p>
+                  <h1 className="text-lg font-bold">{myth?.nome_autor}</h1>
+                  <p className="text-neutral-400">{myth?.email_autor}</p>
                   <p className="text-neutral-400">
                     {myth?.created_at &&
                       format(
@@ -296,10 +273,10 @@ const Post = () => {
                   <Avatar className="h-8 w-8">
                     <AvatarImage src="https://github.com/" />
                     <AvatarFallback className="text-black text-xs font-bold text-center">
-                      {getInitialsFromName(author?.username)}
+                      {getInitialsFromName(myth?.nome_autor)}
                     </AvatarFallback>
                   </Avatar>
-                  <p className="text-sm">{author.username}</p>
+                  <p className="text-sm">{myth.nome_autor}</p>
                 </div>
               )}
 
@@ -382,13 +359,13 @@ const Post = () => {
                           <AvatarImage src="https://github.com/" />
                           <AvatarFallback className="text-black text-xs font-bold text-center">
                             {getInitialsFromName(
-                              authors[comm?.id_user]?.username
+                              comm.nome_user
                             )}
                           </AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="text-sm">
-                            <b>{authors[comm.id_user]?.username}</b> {comm.text}
+                            <b>{comm.nome_user}</b> {comm.text}
                           </p>
                           {comm.created_at && (
                             <p className="text-xs text-white/50">
