@@ -29,7 +29,11 @@ export const ListMyths = ({
       {myths.map((myth) => (
         <Link to={"/legends/" + myth?._id}>
           <div className="aspect-video col-span-1 bg-slate-700 rounded flex items-start justify-end p-2">
-          <img src={myth?.imagem} alt="Imagem" style={{ width: '250px', height: '200px' }} />
+          <img
+          src={myth?.imagem || "/logo.png"}
+          alt="Imagem"
+          style={{ width: '250px', height: '200px' }}
+          />
 
             {editAndDelete && (
               <DropdownMenu>
