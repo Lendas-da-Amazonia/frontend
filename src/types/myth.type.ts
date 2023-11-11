@@ -10,3 +10,7 @@ export type TypeMyth = {
   imagem: string,
   created_at?: Date;
 }
+
+export type TypeMyths ={
+  [idMyth: string]: TypeMyth
+}

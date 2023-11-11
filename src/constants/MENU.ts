@@ -16,8 +16,8 @@ export const MENU = () => {
     //   icon: HiUsers,
     // },
     {
-      name: "Pesquisar",
-      pathname: "/search",
+      name: "Pesquisar Lenda",
+      pathname: "/myth/search",
       icon: Search,
     },
     {

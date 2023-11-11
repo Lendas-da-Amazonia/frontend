@@ -14,7 +14,7 @@ export const LayoutSidebar = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex min-h-screen">
-      <div className="w-[300px] h-screen text-white fixed top-0 left-0 px-3 py-5 flex flex-col bg-slate-900 z-50">
+      <div className="w-[300px] h-screen hidden lg:flex text-white fixed top-0 left-0 px-3 py-5 flex-col bg-slate-900 z-50">
         <div className="flex-1 flex flex-col overflow-y-auto">
           <Link to={"/"}>
             <p className="text-center text-lg font-bold">Lendas da Amazônia</p>
@@ -62,9 +62,30 @@ export const LayoutSidebar = ({ children }: { children: React.ReactNode }) => {
           </Button>
         </div>
       </div>
-      <div className="w-[calc(100%-300px)] ml-auto bg-slate-100 relative min-h-screen">
-        <div className="absolute top-0 left-0 w-full h-full z-0 opacity-10 bg-center bg-cover bg-no-repeat" />
-        <div className="relative z-10 h-screen w-full">{children}</div>
+      <div className="w-full lg:w-[calc(100%-300px)] ml-auto h-screen">
+        <div className="h-[calc(100%-3.5rem)] lg:h-full overflow-auto w-full">
+          {children}
+        </div>
+        <div className="relative z-50 flex justify-evenly lg:hidden h-14 w-full bg-slate-900">
+          {MENU().map((item) => (
+            <div
+              key={item.name}
+              onClick={() => navigate(item.pathname)}
+              className={`group cursor-pointer flex gap-3 items-center px-2 text-sm font-medium rounded-md`}
+            >
+              <item.icon
+                className={`${
+                  location.pathname === item.pathname
+                    ? "text-white"
+                    : "text-gray-400 group-hover:text-gray-300"
+                }
+                `}
+                size={25}
+              />
+        
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

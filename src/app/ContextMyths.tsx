@@ -1,8 +1,9 @@
 import { createContext, useState, useContext, useEffect } from "react"
-import { TypeMyth } from "@/types/myth.type"
+import { TypeMyth, TypeMyths } from "@/types/myth.type"
 import { useAuth } from "./ContextAuth"
 import { api } from "@/services/api"
 import { TypeComment } from "@/types/comment.type"
+import { MythModel } from "@/model/Myth.model"
 
 const _mythsController = () => {
   const [general, setGeneral] = useState<TypeMyth[]>([])
@@ -17,6 +18,10 @@ const _mythsController = () => {
     [idMyth: string]: TypeMyth
   }>({})
 
+  const [mythsFavorites, setMythsFavorites] = useState<TypeMyths>({})
+
+  console.log("mythsFavorites: ", mythsFavorites)
+
   // const [mythsByAuthorId, setMyByAuthor] = useState<{
   //   [idAuthor: string]: { [idMyth: string]: TypeMyth }
   // }>({})
@@ -30,9 +35,32 @@ const _mythsController = () => {
 
   const { user } = useAuth()
 
+  const getFavorites = async () => {
+
+    let mythsFavoritesAux = { ...mythsFavorites }
+  
+    const resp = await api().get(`/favorite/my-favorites`).then((res) => res.data as any[]).catch(() => [])
+
+    resp.forEach((mythFavorite) => {
+
+      const myth = MythModel(mythFavorite)
+
+      mythsFavoritesAux = {
+        ...mythsFavoritesAux,
+        [myth._id]: myth
+      }
+
+    })
+
+    setMythsFavorites(mythsFavoritesAux)
+
+  }
+
   useEffect(() => {
 
     const myMythsAux = [...myMyths]
+
+    getFavorites()
 
     myMythsAux.forEach((myth) => {
       setMyMythsDict((prev) => ({
@@ -60,6 +88,7 @@ const _mythsController = () => {
   }, [user, reload])
 
   return {
+    getFavorites,
     general,
     setGeneral,
     myMyths,

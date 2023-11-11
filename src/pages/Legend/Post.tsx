@@ -12,7 +12,7 @@ import { Button as ButtonUi } from "@/components/ui/button"
 import { useUsers } from "@/app/ContextUsers"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { getInitialsFromName } from "@/lib/getInitialsFromName"
-import { Loader2, MessageCircle, MoreHorizontal } from "lucide-react"
+import { Heart, Loader2, MessageCircle, MoreHorizontal } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/ui/input"
 import { getFuso } from "@/lib/utils"
@@ -33,7 +33,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from "@/components/ui/dialog"
 import { TypeComment } from "@/types/comment.type"
 // import { ArrowLeft } from "lucide-react";
@@ -69,6 +69,8 @@ const Post = () => {
 
   const [commentEdit, setCommentEdit] = useState({} as TypeComment)
 
+  const [liked, setLiked] = useState(false)
+
   useEffect(() => {
     if (openModalEditComment) {
       const commentEditAux = comment?.find(
@@ -95,7 +97,6 @@ const Post = () => {
             ...prev,
             [id]: mythAux,
           }))
-
         } catch (e) {
           console.error(e)
         }
@@ -178,7 +179,6 @@ const Post = () => {
     setPublishingComment(false)
   }
 
-
   return (
     <>
       <Dialog
@@ -199,11 +199,11 @@ const Post = () => {
               className="bg-white/80 text-black"
             />
             <ButtonUi
-              disabled={
-                publishingComment
-              }
+              disabled={publishingComment}
               variant="ghost"
-              onClick={() => toEditComment(openModalEditComment, commentEdit.text)}
+              onClick={() =>
+                toEditComment(openModalEditComment, commentEdit.text)
+              }
             >
               {publishingComment && (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -214,7 +214,7 @@ const Post = () => {
         </DialogContent>
       </Dialog>
 
-      <div className="relative bg-black flex h-full overflow-hidden lg:flex-row flex-col lg:justify-center">
+      <div className="relative bg-black flex h-full lg:overflow-hidden lg:flex-row flex-col lg:justify-center">
         <div className="fixed w-full h-full bg-[url('/bg_login.jpg')] opacity-20" />
         <div className="relative z-10 w-full h-full flex-1 lg:max-w-2xl bg-slate-950/90 text-neutral-300 px-5 pt-3 pb-20">
           {/* <ArrowLeft className="h-4 w-4" /> */}
@@ -236,7 +236,12 @@ const Post = () => {
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h1 className="text-lg font-bold">{myth?.nome_autor}</h1>
+                  <Link
+                    className="text-lg font-bold"
+                    to={"/perfil/" + myth.id_autor}
+                  >
+                    {myth?.nome_autor}
+                  </Link>
                   <p className="text-neutral-400">{myth?.email_autor}</p>
                   <p className="text-neutral-400">
                     {myth?.created_at &&
@@ -259,7 +264,7 @@ const Post = () => {
         </div>
         <div
           id={"comments-post-" + id}
-          className="relative z-10 w-full h-full lg:max-w-md px-3 bg-slate-950/70 text-neutral-300 py-10"
+          className="relative z-10 w-full h-full lg:max-w-md px-3 bg-slate-950 text-neutral-300 py-10"
         >
           <section
             id="comments-from-post"
@@ -276,7 +281,9 @@ const Post = () => {
                       {getInitialsFromName(myth?.nome_autor)}
                     </AvatarFallback>
                   </Avatar>
-                  <p className="text-sm">{myth.nome_autor}</p>
+                  <Link className="text-sm" to={"/perfil/" + myth.id_autor}>
+                    {myth.nome_autor}
+                  </Link>
                 </div>
               )}
 
@@ -358,14 +365,18 @@ const Post = () => {
                         <Avatar className="h-8 w-8">
                           <AvatarImage src="https://github.com/" />
                           <AvatarFallback className="text-black text-xs font-bold text-center">
-                            {getInitialsFromName(
-                              comm.nome_user
-                            )}
+                            {getInitialsFromName(comm.nome_user)}
                           </AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="text-sm">
-                            <b>{comm.nome_user}</b> {comm.text}
+                            <Link
+                              className="font-bold"
+                              to={"/perfil/" + comm.id_user}
+                            >
+                              {comm.nome_user}
+                            </Link>{" "}
+                            {comm.text}
                           </p>
                           {comm.created_at && (
                             <p className="text-xs text-white/50">
@@ -438,39 +449,61 @@ const Post = () => {
                   ))}
               </div>
             )}
-            <div className="flex items-center justify-between gap-2 px-2">
-              {status === "not_authenticated" ? (
-                <p className="text-sm w-full border border-white/30 p-2 rounded-lg">
-                  Faça login para comentar
+            <div className="flex flex-col gap-3">
+              <Separator />
+              <div className="flex items-center justify-between gap-2 px-2">
+                {/* <ButtonUi variant={"ghost"} size={"icon"} onClick={() => setLiked(prev => !prev)}> */}
+
+                <div className="flex items-center gap-3">
+                  <Heart
+                    className={`h-7 w-7 cursor-pointer scale-100 active:scale-150 ${
+                      liked ? "stroke-red-500" : ""
+                    } ${liked ? "fill-red-500" : ""} duration-200 ${
+                      liked ? "hover:stroke-red-400" : "hover:stroke-slate-400"
+                    }`}
+                    onClick={() => setLiked((prev) => !prev)}
+                  />
+                  <MessageCircle className="h-7 w-7" />
+                </div>
+                <p className="">
+                  <b>{comment.length}</b> comentários
                 </p>
-              ) : (
-                <Input
-                  placeholder={"Adicione um comentário..."}
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                />
-              )}
-              <div>
+                {/* </ButtonUi> */}
+              </div>
+              <div className="flex items-center justify-between gap-2 px-2">
                 {status === "not_authenticated" ? (
-                  <Link to="/login">
-                    <ButtonUi variant="ghost">Entrar</ButtonUi>
-                  </Link>
+                  <p className="text-sm w-full border border-white/30 p-2 rounded-lg">
+                    Faça login para comentar
+                  </p>
                 ) : (
-                  <ButtonUi
-                    disabled={
-                      publishingComment ||
-                      loadingComments ||
-                      commentText.trim().length === 0
-                    }
-                    variant="ghost"
-                    onClick={toPublishComment}
-                  >
-                    {publishingComment && (
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    )}
-                    {publishingComment ? "Publicando" : "Publicar"}
-                  </ButtonUi>
+                  <Input
+                    placeholder={"Adicione um comentário..."}
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                  />
                 )}
+                <div>
+                  {status === "not_authenticated" ? (
+                    <Link to="/login">
+                      <ButtonUi variant="ghost">Entrar</ButtonUi>
+                    </Link>
+                  ) : (
+                    <ButtonUi
+                      disabled={
+                        publishingComment ||
+                        loadingComments ||
+                        commentText.trim().length === 0
+                      }
+                      variant="ghost"
+                      onClick={toPublishComment}
+                    >
+                      {publishingComment && (
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      )}
+                      {publishingComment ? "Publicando" : "Publicar"}
+                    </ButtonUi>
+                  )}
+                </div>
               </div>
             </div>
           </section>

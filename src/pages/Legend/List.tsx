@@ -1,16 +1,31 @@
+import { useMyth } from "@/app/ContextMyths"
 import { ListMyths } from "@/components/ListMyths"
+import { MythModel } from "@/model/Myth.model"
 import { fnMyth } from "@/services/myth"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 const List = () => {
-  const [list, setList] = useState<any[]>([])
+
+  const { readMyths, setReadMyths } = useMyth()
+
+
   useEffect(() => {
+
     const load = async () => {
       const lixAux = await fnMyth.getAll()
-      setList(lixAux)
+
+      lixAux.forEach((myth) => {
+ 
+        setReadMyths((prev) => ({
+          ...prev,
+          [myth._id]: MythModel(myth)
+        }))
+      })
+  
     }
     load()
-  }, [])
+   
+  }, [setReadMyths])
 
   return (
     <div className="h-full min-h-screen bg-slate-900 relative text-white flex flex-col justify-between">
@@ -32,17 +47,17 @@ const List = () => {
         </div>
       </main>
 
-      {list.length > 0 && (
-        <div className="relative bg-slate-900 w-full p-5 text-white flex flex-col items-center justify-center">
+      {Object.values(readMyths).length > 0 && (
+        <div className="relative bg-slate-950 w-full p-5 text-white flex flex-col items-center justify-center">
           <section className="w-full max-w-3xl">
-            <div className="flex justify-between">
+            <div className="flex justify-between mb-5">
               <h1 className="text-lg font-bold">Últimas publicações</h1>
               <a href="#" className="text-blue-400">
                 Ver mais
               </a>
             </div>
 
-            <ListMyths myths={list} />
+            <ListMyths myths={Object.values(readMyths)} />
           </section>
         </div>
       )}

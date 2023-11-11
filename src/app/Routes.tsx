@@ -18,7 +18,8 @@ const ListUsers = lazy(() => import("../pages/Users/List"))
 const Legend = lazy(() => import("../pages/Legend/Post"))
 const Create = lazy(() => import("../pages/Legend/Create"))
 const LegendList = lazy(() => import("../pages/Legend/List"))
-const MyLegendList = lazy(() => import("../pages/Legend/MyList"))
+const Perfil = lazy(() => import("../pages/Users/Perfil"))
+const SearchMyth = lazy(() => import("../pages/SearchMyth"))
 
 const AppRoutes = () => {
   const { status } = useAuth()
@@ -151,13 +152,46 @@ const AppRoutes = () => {
                 />
               )}
 
+              {status === "not_authenticated" && (
+                <Route
+                  path="/perfil/:id"
+                  element={
+                    <LayoutNavbar>
+                      <Perfil />
+                    </LayoutNavbar>
+                  }
+                />
+              )}
+
               {status === "authenticated" && (
                 <Route
                   path="/perfil/:id"
                   element={
                     <LayoutSidebar>
-                      <MyLegendList />
+                      <Perfil />
                     </LayoutSidebar>
+                  }
+                />
+              )}
+
+              {status === "authenticated" && (
+                <Route
+                  path="/myth/search"
+                  element={
+                    <LayoutSidebar>
+                      <SearchMyth />
+                    </LayoutSidebar>
+                  }
+                />
+              )}
+
+              {status === "not_authenticated" && (
+                <Route
+                  path="/myth/search"
+                  element={
+                    <LayoutNavbar>
+                      <SearchMyth />
+                    </LayoutNavbar>
                   }
                 />
               )}

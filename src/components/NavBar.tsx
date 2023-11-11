@@ -25,9 +25,9 @@ export const NavBar = () => {
       to: "/about_us",
     },
     {
-      label: "Coleção",
-      to: "/",
-    },
+      label: "Pesquisar Lendas",
+      to: "/myth/search",
+    }
   ]
 
   return (
