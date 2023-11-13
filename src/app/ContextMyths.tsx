@@ -20,8 +20,6 @@ const _mythsController = () => {
 
   const [mythsFavorites, setMythsFavorites] = useState<TypeMyths>({})
 
-  console.log("mythsFavorites: ", mythsFavorites)
-
   // const [mythsByAuthorId, setMyByAuthor] = useState<{
   //   [idAuthor: string]: { [idMyth: string]: TypeMyth }
   // }>({})

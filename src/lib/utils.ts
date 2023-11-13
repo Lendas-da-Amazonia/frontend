@@ -15,9 +15,9 @@ export function decodeJwtToken(token: string) {
 }
 
 export function getFuso(createdAt: string) {
-  console.log("createdAt: ", createdAt)
+
   const date = parse(createdAt, "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'", new Date())
-  console.log("date: ", date)
+ 
   const year = parseInt(format(date, "yyyy"))
   const month = parseInt(format(date, "MM"))
   const day = parseInt(format(date, "dd"))

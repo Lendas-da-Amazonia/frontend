@@ -1,5 +1,5 @@
 import { useAuth } from "@/app/ContextAuth"
-import { Home, Search, UserCircle2 } from "lucide-react"
+import { Home, PlusSquare, Search, UserCircle2 } from "lucide-react"
 
 export const MENU = () => {
   const { user } = useAuth()
@@ -19,6 +19,11 @@ export const MENU = () => {
       name: "Pesquisar Lenda",
       pathname: "/myth/search",
       icon: Search,
+    },
+    {
+      name: "Criar Lenda",
+      pathname: "/create_legend",
+      icon: PlusSquare,
     },
     {
       name: "Meu Perfil",

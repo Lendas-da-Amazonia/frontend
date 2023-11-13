@@ -32,12 +32,11 @@ const Create = () => {
       reader.onload = () => {
         if (reader.result) {
           const result = reader.result as string;
-          console.log(result);
           setImage(result);
         }
       };
       reader.onerror = (error) => {
-        console.log("Error", error);
+        console.error("Error", error);
       };
     }
   }
@@ -88,7 +87,7 @@ const Create = () => {
 
   return (
     <div className="h-full bg-slate-950 flex justify-center">
-      <div className="w-full max-w-3xl py-10 text-white flex flex-col gap-7">
+      <div className="w-full max-w-3xl px-5 py-10 text-white flex flex-col gap-7">
         <div className="col-span-3 h-fit">
           <Label>Título</Label>
           <Input

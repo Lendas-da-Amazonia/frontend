@@ -34,7 +34,7 @@ const Login = () => {
       }
     }
     catch (e: any) {
-      console.error('message', e)
+      console.error(e)
 
       if(e?.message?.includes('401')) toast.error("Usuário ou senha incorretos!")
     }

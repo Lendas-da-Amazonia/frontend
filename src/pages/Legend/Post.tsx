@@ -51,7 +51,12 @@ const Post = () => {
 
   const [openModalEditComment, setOpenModalEditComment] = useState("")
 
+  const { profiles, getPerfil } = useUsers()
+
+  const [reloadLike, setReloadLike] = useState(false)
+
   const { setAuthors } = useUsers()
+
   const {
     readMyths,
     setReadMyths,
@@ -100,8 +105,15 @@ const Post = () => {
         } catch (e) {
           console.error(e)
         }
-
         setLoading(false)
+        if (user._id) {
+          await getPerfil({ idUser: user._id })
+        }
+
+        if (myth.id_autor) {
+          await getPerfil({ idUser: myth.id_autor })
+        }
+
       }
       load()
     }
@@ -109,7 +121,12 @@ const Post = () => {
     return () => {
       setLoading(true)
     }
-  }, [id, setLoading, setAuthors, setReadMyths])
+  }, [id, setLoading, setAuthors, setReadMyths, profiles, reloadLike])
+
+  useEffect(() => {
+    console.log("profiles?.[user?._id]?.favorites: ", profiles?.[user?._id]?.favorites)
+    setLiked(Boolean(profiles?.[user?._id]?.favorites?.[id || ""]))
+  }, [profiles, user._id, id])
 
   useEffect(() => {
     const loadComments = async () => {
@@ -177,6 +194,14 @@ const Post = () => {
     }
 
     setPublishingComment(false)
+  }
+
+  const toLikePost = async () => {
+    await api().post(`/favorite/favorite-or-unfavorite`, {
+      mythId: id,
+    })
+    setReloadLike(prev => !prev)
+    setLiked(prev => !prev)
   }
 
   return (
@@ -461,7 +486,9 @@ const Post = () => {
                     } ${liked ? "fill-red-500" : ""} duration-200 ${
                       liked ? "hover:stroke-red-400" : "hover:stroke-slate-400"
                     }`}
-                    onClick={() => setLiked((prev) => !prev)}
+                    onClick={async () => {
+                      if(user._id) await toLikePost()
+                    }}
                   />
                   <MessageCircle className="h-7 w-7" />
                 </div>
